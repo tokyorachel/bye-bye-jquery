@@ -11,3 +11,5 @@ Some tools covered include:
 - PostCss
 - StyleLint
 - ESLint
+
+Slideshow can be viewed at [https://tokyorachel.github.io/bye-bye-jquery/](https://tokyorachel.github.io/bye-bye-jquery/)

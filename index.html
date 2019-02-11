@@ -1,0 +1,519 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/custom.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-markdown>
+					<textarea data-template>
+						## Bye-bye, jQuery!
+						### Using Modern Front End Development Tools with Drupal 8
+					</textarea>
+				</section>
+				<section>
+						<h1>Problem</h1>
+						<div class= fragment>
+							<img
+								src="images/drupal.png"
+								style="width:20%; display:inline-block; vertical-align:middle;" />
+							<h3
+								style="width:75%; display:inline-block; vertical-align: middle;">Drupal 8 is awesome!</h3>
+						</div>
+							<p class="fragment">...unless you're a<br />front-end developer :(</p>
+				</section>
+				<section>
+						<h2>Didn't Twig improve everything?</h2>
+						<h3 class="fragment">Twig is a great templating tool, but it's 2019. We want more!</h3>
+				</section>
+				<section>
+					<h2>MORE...</h2>
+					<ul>
+						<li class="fragment">SASS</li>
+						<li class="fragment">ES6+ JavaScript</li>
+						<li class="fragment">hot reloading</li>
+						<li class="fragment">code linting</li>
+						<li class="fragment">automation</li>
+						<li class="fragment">REACT</li>
+					</ul>
+				</section>
+				<section data-background-image='images/elephant.jpg'>
+					<div class="fragment">
+						<h1>REACT</h1>
+					</div>
+				</section>
+				<section>
+					<h2>React is awesome!</h2>
+					<p class="fragment">But you don't need it for every situation.</p>
+				</section>
+				<section>
+					<img class="fragment" src="images/hand-toothpick.png" style="max-height:500px; display: inline-block" />
+					<img class="fragment" src="images/chainsaw.png" style="width: 65%; display: inline-block"/>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## What's wrong with jQuery?
+					</textarea>
+				</section>
+				<section data-markdown data-background-image='images/mulder_computer.jpg'>
+					<textarea data-template>
+						## It's not the 1990's anymore ;)
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## jQuery _was_ awesome.
+						<ul>
+							<li class="fragment">easy to manipulate the DOM</li>
+							<li class="fragment">cross-browser compliant</li>
+							<li class="fragment">introduced great features like chaining, animations, easy ajax requests, promises</li>
+						</ul>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## Today, JavaScript & CSS _are_ awesome!
+						<ul>
+							<li class="fragment">ECMA standards are being updated roughly once a year and introduce great new features into javascript</li>
+							<li class="fragment">Babel lets us transpile and use those features almost immediately (finally, no waiting for IE to support something)</li>
+						</ul>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## Today, JavaScript & CSS _are_ awesome!
+						<ul>
+							<li class="fragment">We have new js libraries like React & Vue that empower developers to write code that is both complex and clean</li>
+							<li class="fragment">CSS transforms and the HTML canvas can do a lot of animation work</li>
+							<li class="fragment">flexbox and now the css grid are powerful layout tools that are generally well-supported by modern browsers</li>
+						</ul>
+					</textarea>
+				</section>
+				<section data-markdown data-background-image='images/mordor.gif'>
+					<textarea data-template>
+						
+						<h2>One does not simply</h2>
+						<h2 class="fragment fade-in-then-semi-out">walk into Mordor...</h2>
+						<h2 class="fragment fade-in-then-semi-out">use Webpack...</h2>
+						<h2 class="fragment fade-in-then-semi-out">build Drupal sites...</h2>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## How to make a <br/>Drupal 8 theme<br />using the latest front end tools
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## NodeJS
+
+						Node packages are at the core of modern js tooling. You'll need npm (or yarn) to manage your packages. This is just like how we use Composer to manage our php packages.
+						<!-- .element: class="fragment" -->
+						```
+						brew install nvm
+						nvm install node
+						```
+						<!-- .element: class="fragment" -->
+						```
+						cd docroot/themes/custom/mynewtheme
+						npm init -y
+						```
+						<!-- .element: class="fragment" -->
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## Webpack
+
+						Webpack is the build tool we use to assemble all our front end code. Think of it as being like a new and improved Gulp.
+						<!-- .element: class="fragment" -->
+						```
+						npm install --save-dev webpack webpack-cli
+						```
+						<!-- .element: class="fragment" -->
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						webpack.config.js 
+
+						```
+						const webpack = require('webpack');
+						const path = require('path');
+
+						entry: {
+							main: ['./src/js/theme.js', './src/scss/styles.scss']
+						},
+						output: {
+							filename: '[name].bundle.js',
+							path: path.join(__dirname, '../','build/'),
+							publicPath: '/build'
+						},
+						externals: {
+							Drupal: 'Drupal',
+							drupalSettings: 'drupalSettings',
+						},
+						```
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						## Babel
+
+						Babel will transpile our js so that we can write code using the latest features, but know it will still be compatible with older browsers.
+						<!-- .element: class="fragment" -->
+						```
+						npm install --save-dev @babel/core @babel/cli
+							@babel/preset-env babel-loader
+						```
+						<!-- .element: class="fragment" -->
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						.babelrc 
+						```
+						{
+							"presets": ["@babel/preset-env"]
+						}
+						```
+
+						webpack.config.js
+						<!-- .element: class="fragment" data-fragment-index="1" -->
+						```
+						module: {
+							rules:[
+								{
+									test: /\.(js)$/,
+									exclude: /node_modules/,
+									use: ['babel-loader', 'eslint-loader']
+								},
+							]
+						},
+						```
+						<!-- .element: class="fragment" data-fragment-index="1" -->
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						## SASS & PostCSS
+
+						```
+						npm install --save-dev css-loader mini-css-extract-plugin
+							node-sass postcss-loader sass-loader style-loader
+						```
+						<!-- .element: class="fragment data-fragment-index="0" -->
+						webpack.config.js
+						<!-- .element: class="fragment" data-fragment-index="1" -->
+						```
+						const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+						...
+						plugins: [
+							new MiniCssExtractPlugin()
+						]
+						```
+						<!-- .element: class="fragment" data-fragment-index="1" -->
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						postcss.config.js 
+
+						```
+						module.exports = {
+							plugins: [
+								require('autoprefixer')({
+									'browsers': ['> 1%, last 4 versions, not dead']
+								})
+							]
+						}
+						```
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						webpack.config.js
+
+						```
+						{
+							test: /\.(sa|sc|c)ss$/,
+							use: [
+								MiniCssExtractPlugin.loader,
+								'css-loader',
+								{
+									loader: 'postcss-loader',
+									options: {
+										config: {
+											path: __dirname + '/postcss.config.js'
+										}
+									},
+								},
+								'sass-loader',
+							],
+						}
+						```
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						## Stylelint and ESLint
+
+						Linters help us write clean code that conforms to a common set of standards.
+						<!-- .element: class="fragment" -->
+						- keeps the code human-readable
+						<!-- .element: class="fragment" -->
+						- prevents typos and other syntax errors from getting into the code base
+						<!-- .element: class="fragment" -->
+						- helps maintain consistency of style between different developers on a team 
+						<!-- .element: class="fragment" -->
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						```
+						npm install --save-dev babel-eslint eslint
+							eslint-loader eslint-plugin-import
+						```
+
+						```
+						npm install --save-dev stylelint stylelint-config-standard
+							stylelint-scss stylelint-webpack-plugin
+						```
+						<!-- .element: class="fragment" -->
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						.stylelintrc
+
+						```
+						{
+							"extends": "stylelint-config-standard",
+							"plugins": [
+								"stylelint-scss"
+							],
+							"rules": {
+								"at-rule-no-unknown": null,
+								"scss/at-rule-no-unknown": true,
+							}
+						}
+						```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						.eslintrc
+
+						```
+						{
+							parser: "babel-eslint",
+							"root": true,
+							"env": {
+								"browser": true,
+								"node": true,
+							},
+							"globals": {
+								"Drupal": true,
+								"drupalSettings": true,
+							},
+							"rules": {},
+							"extends": ["airbnb-base"]
+						}
+						```
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						package.json
+
+						```
+						"scripts": {
+							"build": "webpack --config ./config/webpack.prod.js",
+							"watch": "webpack --watch --progress --config ./config/webpack.dev.js",
+						}
+						```
+					</textarea>
+				</section>
+
+				<section data-markdown data-background-image='images/dawson-crying.gif'>
+					<textarea data-template>
+						<h3>it's just too much</h3>
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						## Frontpack
+
+						A modern, frontend-focused D8 <br />theme scaffolding module
+
+						[https://github.com/tokyorachel/frontpack](https://github.com/tokyorachel/frontpack)
+
+						caveats: experimental, still under development
+						<!-- .element: class="fragment" -->
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						## Pros:
+						<ul>
+							<li class="fragment">devs get to use powerful new ES6 features
+								<ul>
+									<li>class syntax: <code>class Car extends Vehicle {}</code></li>
+									<li>arrow functions: <code>() => {}</code></li>
+								</ul>
+							</li>
+							<li class="fragment">code linting (both SASS and JS)</li>
+							<li class="fragment">autoprefixing css</li>
+							<li class="fragment">builds the foundation for modern view libraries
+								<ul>
+									<li>ReactJS</li>
+									<li>VueJS</li>
+								</ul>
+							</li>
+						</ul>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## Cons:
+						<ul>
+							<li class="fragment">difficult to get started
+								<ul>
+									<li>tricky to standardize across environments</li>
+									<li>challenges with Acquia Cloud and VMs</li>
+								</ul>
+							</li>
+							<li class="fragment">takes time to learn
+								<ul>
+									<li>your devs might be <em>really</em> experienced with jQuery</li>
+									<li>npm, webpack, ES6, etc all have a learning curve</li>
+								</ul>
+							</li>
+						</ul>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## Is it worth it?
+						<div class="fragment">
+							<h4>Depends on the project</h4>
+							<ul>
+								<li class="fragment">Is it a simple site or marketing piece with a short lifespan?</li>
+								<li class="fragment">Is it going to be maintained by a team that doesn't know any of the technologies we've discussed?</li>
+							</ul>
+						</div>
+					</textarea>
+				</section>
+				<section class="text-dk" data-markdown data-background-image='images/buried.jpg'>
+					<textarea data-template>
+						### Web development doesn't stand still
+						<ul class="offset-right">
+							<li class="fragment">Developers need to stay up-to-date on best practices or get left behind the competition</li>
+							<li class="fragment">Better tools produce better automation, and automation wins in terms of costs and efficiency</li>
+						</ul>				
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Humans should write this:
+
+						```
+						.example {
+							transition: all .5s;
+							background: linear-gradient(to bottom, white, black);
+						}
+						```
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						### Autoprefixer should write this:
+
+						```
+						.example {
+							-webkit-transition: all .5s;
+							-o-transition: all .5s;
+							transition: all .5s;
+							background: -webkit-gradient(linear, left top, left bottom, from(white), to(black));
+							background: -webkit-linear-gradient(top, white, black);
+							background: -o-linear-gradient(top, white, black);
+							background: linear-gradient(to bottom, white, black);
+						}
+						```
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						<img src="images/think-of-the-feds.gif" />
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						## About me
+						Rachel Ponce<br/>
+						レイチェル　ポンス<br/>
+						Lead Javascript Engineer<br/>
+						at Genero Inc.
+
+						linkedin: [rnponce](https://linkedin.com/in/rnponce)<br />
+						github: [tokyorachel](https://github.com/tokyorachel)
+
+						<img src="images/squirrelFace.png" style="max-height:150px" />
+					</textarea>
+				</section>
+
+				<section data-markdown data-background-image='images/questions.gif'>
+					<textarea data-template>
+						# Questions?
+					</textarea>
+				</section>
+			</div>
+		</div>
+
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
